@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一份简洁的个人主页，记录兴趣、目标与学习足迹。">
+  <title>我的个人主页</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%235b5ce2'/%3E%3Ccircle cx='32' cy='25' r='10' fill='white'/%3E%3Cpath d='M14 53c2-10 9-15 18-15s16 5 18 15' fill='white'/%3E%3C/svg%3E">
+  <style>
+    /* ===== 快速修改区：在这里统一调整网页颜色 ===== */
+    :root {
+      --primary: #5b5ce2;
+      --primary-dark: #4143bd;
+      --accent: #24b49a;
+      --ink: #172033;
+      --muted: #667085;
+      --paper: #ffffff;
+      --line: #dfe3ee;
+      --soft: #f4f6fb;
+      --shadow: 0 22px 60px rgba(39, 43, 94, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y proximity;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--soft);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    a { color: inherit; }
+
+    .screen {
+      min-height: 100svh;
+      scroll-snap-align: start;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about {
+      display: grid;
+      place-items: center;
+      padding: 64px 24px;
+      background:
+        radial-gradient(circle at 8% 12%, rgba(91, 92, 226, 0.16), transparent 31%),
+        radial-gradient(circle at 93% 86%, rgba(36, 180, 154, 0.14), transparent 29%),
+        linear-gradient(145deg, #fbfcff 0%, #f3f5fb 100%);
+    }
+
+    .about::before,
+    .about::after {
+      content: "";
+      position: absolute;
+      border: 1px solid rgba(91, 92, 226, 0.15);
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .about::before { width: 330px; height: 330px; left: -190px; top: 12%; }
+    .about::after { width: 240px; height: 240px; right: -110px; bottom: 7%; }
+
+    .profile-card {
+      width: min(920px, 100%);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: clamp(36px, 7vw, 84px);
+      align-items: center;
+      padding: clamp(36px, 6vw, 72px);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.92);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: min(280px, 70vw);
+      aspect-ratio: 1;
+      justify-self: center;
+    }
+
+    .avatar-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border: 2px solid rgba(91, 92, 226, 0.2);
+      border-radius: 50%;
+    }
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center 28%;
+      border-radius: 50%;
+      box-shadow: 0 18px 40px rgba(34, 39, 82, 0.2);
+    }
+
+    .eyebrow {
+      margin: 0 0 8px;
+      color: var(--primary);
+      font-size: 0.875rem;
+      font-weight: 750;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, p { margin-top: 0; }
+
+    h1 {
+      margin-bottom: 12px;
+      font-size: clamp(2.6rem, 6vw, 5.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+    }
+
+    .intro {
+      max-width: 560px;
+      margin-bottom: 28px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+    }
+
+    .details {
+      display: grid;
+      gap: 18px;
+    }
+
+    .detail-row {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .detail-label {
+      color: var(--muted);
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 4px 13px;
+      color: var(--primary-dark);
+      background: rgba(91, 92, 226, 0.09);
+      border: 1px solid rgba(91, 92, 226, 0.12);
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .goal {
+      margin: 0;
+      color: #3c465b;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-decoration: none;
+      transform: translateX(-50%);
+    }
+
+    .scroll-hint span:last-child {
+      width: 22px;
+      height: 34px;
+      border: 1.5px solid rgba(102, 112, 133, 0.55);
+      border-radius: 999px;
+      position: relative;
+    }
+
+    .scroll-hint span:last-child::after {
+      content: "";
+      position: absolute;
+      width: 4px;
+      height: 7px;
+      left: 50%;
+      top: 7px;
+      background: var(--primary);
+      border-radius: 999px;
+      transform: translateX(-50%);
+      animation: scroll 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scroll {
+      0%, 100% { transform: translate(-50%, 0); opacity: 0.4; }
+      50% { transform: translate(-50%, 9px); opacity: 1; }
+    }
+
+    .journey {
+      display: grid;
+      place-items: center;
+      padding: clamp(72px, 10vw, 120px) 24px;
+      background: var(--ink);
+      color: white;
+    }
+
+    .journey-inner {
+      width: min(840px, 100%);
+    }
+
+    .journey .eyebrow { color: #71e0cc; }
+
+    h2 {
+      margin-bottom: 18px;
+      font-size: clamp(2.1rem, 5vw, 4.25rem);
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+    }
+
+    .section-intro {
+      max-width: 580px;
+      margin-bottom: clamp(44px, 8vw, 76px);
+      color: #aeb7c9;
+      font-size: 1.05rem;
+    }
+
+    .timeline {
+      position: relative;
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 38px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 11px;
+      bottom: 11px;
+      left: 7px;
+      width: 1px;
+      background: linear-gradient(var(--accent), rgba(113, 224, 204, 0.15));
+    }
+
+    .record {
+      position: relative;
+      padding: 0 0 46px;
+    }
+
+    .record:last-child { padding-bottom: 0; }
+
+    .record::before {
+      content: "";
+      position: absolute;
+      left: -37px;
+      top: 10px;
+      width: 11px;
+      height: 11px;
+      background: var(--accent);
+      border: 4px solid var(--ink);
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(113, 224, 204, 0.45);
+    }
+
+    .record-card {
+      display: grid;
+      grid-template-columns: 128px 1fr;
+      gap: 26px;
+      padding: 24px 26px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .record-card:hover {
+      transform: translateY(-3px);
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(113, 224, 204, 0.34);
+    }
+
+    .record-kind {
+      color: #71e0cc;
+      font-size: 0.82rem;
+      font-weight: 750;
+      letter-spacing: 0.1em;
+    }
+
+    .record h3 {
+      margin: 0 0 8px;
+      font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+      line-height: 1.4;
+    }
+
+    .record p {
+      margin-bottom: 0;
+      color: #aeb7c9;
+    }
+
+    .footer-note {
+      margin: 54px 0 0;
+      color: #8c96a9;
+      font-size: 0.875rem;
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      html { scroll-snap-type: none; }
+
+      .about { padding: 48px 18px 84px; }
+
+      .profile-card {
+        grid-template-columns: 1fr;
+        gap: 34px;
+        padding: 34px 24px;
+        border-radius: 26px;
+        text-align: center;
+      }
+
+      .avatar-wrap { width: min(190px, 54vw); }
+      .intro { margin-left: auto; margin-right: auto; }
+      .details { text-align: left; }
+      .detail-row { grid-template-columns: 1fr; gap: 6px; }
+      .tags { justify-content: center; }
+      .detail-label { text-align: center; }
+      .goal { text-align: center; }
+
+      .journey { place-items: start center; padding-inline: 18px; }
+      .record-card { grid-template-columns: 1fr; gap: 8px; padding: 22px; }
+      .record { padding-bottom: 30px; }
+      .timeline { padding-left: 30px; }
+      .record::before { left: -29px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .scroll-hint span:last-child::after { animation: none; }
+      .record-card { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="screen about" aria-labelledby="about-title">
+      <div class="profile-card">
+        <div class="avatar-wrap">
+          <img class="avatar" src="大头.jpg" alt="我的头像" width="770" height="1026">
+        </div>
+
+        <div class="profile-content">
+          <p class="eyebrow">About me</p>
+          <!-- 修改昵称：替换下面 h1 中的文字 -->
+          <h1 id="about-title">你好，我是小明</h1>
+          <!-- 修改一句话介绍 -->
+          <p class="intro">一个对技术和生活保持好奇的学习者，正在用代码把想法慢慢变成现实。</p>
+
+          <div class="details">
+            <div class="detail-row">
+              <span class="detail-label">兴趣爱好</span>
+              <!-- 修改兴趣：增删下面的 span 即可 -->
+              <div class="tags" aria-label="兴趣爱好">
+                <span class="tag">编程</span>
+                <span class="tag">阅读</span>
+                <span class="tag">摄影</span>
+                <span class="tag">运动</span>
+              </div>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">学习目标</span>
+              <!-- 修改学习目标 -->
+              <p class="goal">掌握 Web 开发与数据采集，把每一次学习都沉淀成看得见的作品。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a class="scroll-hint" href="#learning" aria-label="前往我的学习记录">
+        <span>继续向下</span>
+        <span aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <section class="screen journey" id="learning" aria-labelledby="learning-title">
+      <div class="journey-inner">
+        <p class="eyebrow">Learning log</p>
+        <h2 id="learning-title">我的学习记录</h2>
+        <p class="section-intro">从第一个功能到第一个作品，记录每个小小的完成，也为下一次出发留下坐标。</p>
+
+        <!-- 增加记录：复制一个 li.record，修改分类、标题和说明即可 -->
+        <ol class="timeline">
+          <li class="record">
+            <article class="record-card">
+              <span class="record-kind">第一个功能</span>
+              <div>
+                <h3>实现：爬虫抓取</h3>
+                <p>完成了第一次网页数据抓取，从读取页面到提取信息，理解了自动化采集的基本流程。</p>
+              </div>
+            </article>
+          </li>
+          <li class="record">
+            <article class="record-card">
+              <span class="record-kind">第一个网页</span>
+              <div>
+                <h3>我的个人主页</h3>
+                <p>用一个 HTML 文件搭建自己的线上名片，也从这里开始持续记录学习与成长。</p>
+              </div>
+            </article>
+          </li>
+        </ol>
+
+        <p class="footer-note">持续学习，保持记录。</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
